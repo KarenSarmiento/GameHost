@@ -57,15 +57,15 @@ namespace GameHost.Hubs
             bool existsGameInstance = gameInstances.TryGetValue(pin, out instance);
             if (existsGameInstance) {
                 if (string.Equals(winner, "1")) {
-                    Clients.Client(instance.getPOneID()).SendAsync("endGame", "WINNER");
-                    Clients.Client(instance.getPTwoID()).SendAsync("endGame", "LOSER");
+                    Clients.Client(instance.getPOneID()).SendAsync("ackEndGame", "WINNER");
+                    Clients.Client(instance.getPTwoID()).SendAsync("ackEndGame", "LOSER");
                 } else if (string.Equals(winner, "2")) {
-                    Clients.Client(instance.getPOneID()).SendAsync("endGame", "LOSER");
-                    Clients.Client(instance.getPTwoID()).SendAsync("endGame", "WINNER");
+                    Clients.Client(instance.getPOneID()).SendAsync("ackEndGame", "LOSER");
+                    Clients.Client(instance.getPTwoID()).SendAsync("ackEndGame", "WINNER");
 
                 } else {
-                    Clients.Client(instance.getPOneID()).SendAsync("endGame", "UNKNOWN");
-                    Clients.Client(instance.getPTwoID()).SendAsync("endGame", "UNKNOWN");
+                    Clients.Client(instance.getPOneID()).SendAsync("ackEndGame", "UNKNOWN");
+                    Clients.Client(instance.getPTwoID()).SendAsync("ackEndGame", "UNKNOWN");
                     System.Console.Error.WriteLine("Invalid endGame string received.");
                 }
                 gameInstances.Remove(pin);
