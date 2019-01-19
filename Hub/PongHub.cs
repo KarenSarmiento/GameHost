@@ -43,11 +43,11 @@ namespace GameHost.Hubs
         }
 
         // 3. In game, controller sends what arrows are pressed. This is redirected to display.
-        public void arrowPressed(string pin, string direction) {
+        public void buttonPressed(string pin, string button) {
             Pong instance;
             bool existsGameInstance = gameInstances.TryGetValue(pin, out instance);
             if (existsGameInstance) {
-                Clients.Client(instance.getDisplayID()).SendAsync("arrowPressed", direction);
+                Clients.Client(instance.getDisplayID()).SendAsync("arrowPressed", button);
             }
         }
 
