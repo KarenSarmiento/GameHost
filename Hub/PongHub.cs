@@ -28,17 +28,17 @@ namespace GameHost.Hubs
                 int numPlayersInGame = instance.getNumPlayersInGame();
                 if (numPlayersInGame == 0) {
                     instance.setPOneID(Context.ConnectionId);
-                    Clients.Client(instance.getPOneID()).SendAsync("ackJoinGameRequest", "WAIITNG");
+                    Clients.Client(instance.getPOneID()).SendAsync("ackControlConnectionRequest", "WAIITNG");
                 } else {
                     instance.setPTwoID(Context.ConnectionId);
-                    Clients.Client(instance.getPOneID()).SendAsync("ackJoinGameRequest", "SUCCESS");
-                    Clients.Client(instance.getPTwoID()).SendAsync("ackJoinGameRequest", "SUCCESS");
-                    Clients.Client(instance.getDisplayID()).SendAsync("ackJoinGameRequest", "SUCCESS");
+                    Clients.Client(instance.getPOneID()).SendAsync("ackControlConnectionRequest", "SUCCESS");
+                    Clients.Client(instance.getPTwoID()).SendAsync("ackControlConnectionRequest", "SUCCESS");
+                    Clients.Client(instance.getDisplayID()).SendAsync("ackControlConnectionRequest", "SUCCESS");
                     instance.setGameInProgress(true);
                 }
                 instance.incrementNumPlayersInGame();
             } else {
-                Clients.Client(Context.ConnectionId).SendAsync("ackJoinGameRequest", "FAILURE");
+                Clients.Client(Context.ConnectionId).SendAsync("ackControlConnectionRequest", "FAILURE");
             }
         }
 
