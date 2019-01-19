@@ -1,8 +1,9 @@
-<!DOCTYPE html>
-<html>
+<!--<!DOCTYPE html>-->
+<!--<html>-->
 <head>
     <meta charset="utf-8" />
     <script type="text/javascript" src="lib/signalr.min.js"></script>
+    <script src="lib/jquery-3.3.1.js"></script>
     <title>Controller</title>
     <link rel="stylesheet" href="gameController.css">
 </head>
@@ -42,7 +43,8 @@
     </div>
 </div>
 <script>
-    var pin = window.sessionStorage.getItem("pin");
+    let pin = window.sessionStorage.getItem("pin");
+    let connection = window.sessionStorage.getItem("connection");
 
     function buttonPressed(button) {
         connection.invoke("buttonPressed", pin, button);
@@ -64,4 +66,4 @@
     });
 </script>
 </body>
-</html>
+<!--</html>-->
