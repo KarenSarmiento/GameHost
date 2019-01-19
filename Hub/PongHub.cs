@@ -14,6 +14,7 @@ namespace GameHost.Hubs
             string pin = generateRandomGamePin();
             Pong pong = new Pong(Context.ConnectionId);
             gameInstances.Add(pin, pong);
+            Clients.Client(Context.ConnectionId).SendAsync("ackStartPong", pin);
         }
 
         // 2. Controller attempts to conect to a game with a pin.
