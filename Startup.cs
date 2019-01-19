@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GameHost.Hubs;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,6 +35,7 @@ namespace GameHost
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddSignalR().AddAzureSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,7 +53,11 @@ namespace GameHost
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            app.UseFileServer();
+            app.UseAzureSignalR(routes =>
+            {
+                routes.MapHub<GameHostHub>("/gamehost");
+            });
             app.UseCookiePolicy();
 
             app.UseMvc(routes =>
