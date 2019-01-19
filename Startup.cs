@@ -56,7 +56,7 @@ namespace GameHost
             app.UseFileServer();
             app.UseAzureSignalR(routes =>
             {
-                routes.MapHub<GameHostHub>("/gamehost");
+                routes.MapHub<PongHub>("/ponghub");
             });
             app.UseCookiePolicy();
 
