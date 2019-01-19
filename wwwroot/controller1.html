@@ -51,8 +51,10 @@
         </div>
     </div>
     <script>
+        import * as signalR from "./lib/signalr";
+
         // connect to pongHub by default since we currently only have one game available
-        var connection = new signalR.HubConnectionBuilder()
+        let connection = new signalR.HubConnectionBuilder()
             .withUrl('/pongHub')
             .build();
         connection.start();

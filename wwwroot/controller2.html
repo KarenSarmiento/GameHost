@@ -42,7 +42,8 @@
     </div>
 </div>
 <script>
-    var pin = window.sessionStorage.getItem("pin");
+    let pin = window.sessionStorage.getItem("pin");
+    let connection = window.sessionStorage.getItem("connection");
 
     function buttonPressed(button) {
         connection.invoke("buttonPressed", pin, button);
