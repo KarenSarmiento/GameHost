@@ -1,0 +1,271 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+    <script type="text/javascript" src="lib/signalr.min.js"></script>
+    <script type="text/javascript">
+
+        class Dimensions {
+            constructor(width, height) {
+                this.width = width;
+                this.height = height;
+            }
+        }
+
+        let paddingFactor = 0.9;
+        let screenProportions = new Dimensions(4, 3);
+
+        let virtualPaneDimensions = new Dimensions(400, 300);
+        let virtualPlayerDimensions = new Dimensions(5, 100);
+
+        let initialVirtualBallPosition  = new Dimensions(
+            virtualPaneDimensions.width/2,
+            virtualPaneDimensions.height/2);
+        let virtualBallPosition = getNewDimension(initialVirtualBallPosition);
+
+        let virtualBallRadius = 10;
+        let virtualBallDirection = normalize(new Dimensions(genRandom(0.4, 0.6), genRandom(-1, 1)));
+        let virtualBallSpeed = 0.5;
+
+        let virtualBallMinDimensions = new Dimensions(virtualPlayerDimensions.width + virtualBallRadius,
+            virtualBallRadius);
+        let virtualBallMaxDimensions = new Dimensions(virtualPaneDimensions.width - virtualPlayerDimensions.width -
+            virtualBallRadius, virtualPaneDimensions.height - virtualBallRadius);
+
+        window.setInterval(moveBall, 3);
+
+        let initialVirtualPlayerPosition1 = new Dimensions(0, 0);
+        let initialVirtualPlayerPosition2 = new Dimensions(virtualPaneDimensions.width - virtualPlayerDimensions.width, 0);
+        let virtualPlayerPosition1 = getNewDimension(initialVirtualPlayerPosition1);
+        let virtualPlayerPosition2 = getNewDimension(initialVirtualPlayerPosition2);
+        let virtualPlayerMoveStep = (virtualPaneDimensions.height - virtualPlayerDimensions.height) / 15;
+
+        let virtualPlayerMinHeight = 0;
+        let virtualPlayerMaxHeight = virtualPaneDimensions.height - virtualPlayerDimensions.height;
+
+        let running = false;
+
+        // Just initial values, will be changed immediately
+        let actualPaneDimensions = new Dimensions(
+            virtualPaneDimensions.width,
+            virtualPaneDimensions.height);
+
+        function getNewDimension(fromDimension) {
+            return new Dimensions(fromDimension.width, fromDimension.height);
+        }
+
+        function restartGame() {
+            running = false;
+
+            virtualBallPosition = getNewDimension(initialVirtualBallPosition);
+            virtualPlayerPosition1 = getNewDimension(initialVirtualPlayerPosition1);
+            virtualPlayerPosition2 = getNewDimension(initialVirtualPlayerPosition2);
+
+            onSizeChanged();
+        }
+
+        function normalize(dimensions) {
+            len = Math.sqrt(dimensions.width**2 + dimensions.height**2);
+            return new Dimensions(dimensions.width / len, dimensions.height / len);
+        }
+
+        function genRandom(beg, to) {
+            return Math.random() * (to-beg) + beg;
+        }
+
+        function scaleDimensions(dim, fromDimensions, toDimensions) {
+            let widthFactor = toDimensions.width / fromDimensions.width;
+            let heightFactor = toDimensions.height / fromDimensions.height;
+
+            return new Dimensions(dim.width * widthFactor, dim.height * heightFactor);
+        }
+
+        function scaleScalar(scalar, fromDimensions, toDimensions) {
+            return scalar * toDimensions.width / fromDimensions.width;
+        }
+
+        function updatePaneSize() {
+            let availableWidth = window.innerWidth * paddingFactor;
+            let availableHeight = window.innerHeight * paddingFactor;
+
+            // Preserve the proportions
+            if (availableWidth * screenProportions.height < availableHeight * screenProportions.width) {
+                actualPaneDimensions.width = availableWidth;
+                actualPaneDimensions.height = actualPaneDimensions.width * screenProportions.height / screenProportions.width;
+            } else {
+                actualPaneDimensions.height = availableHeight;
+                actualPaneDimensions.width = actualPaneDimensions.height * screenProportions.width / screenProportions.height;
+            }
+
+            let board = document.getElementById("board");
+            let svgBoard = document.getElementById("svg_board");
+
+            board.setAttribute("width", actualPaneDimensions.width);
+            board.setAttribute("height", actualPaneDimensions.height);
+
+            svgBoard.setAttribute("width", actualPaneDimensions.width);
+            svgBoard.setAttribute("height", actualPaneDimensions.height);
+        }
+
+        function drawBall(virtualBallPosition, virtualBallRadius) {
+            let actualPosition = scaleDimensions(virtualBallPosition, virtualPaneDimensions, actualPaneDimensions);
+            let actualRadius = scaleScalar(virtualBallRadius, virtualPaneDimensions, actualPaneDimensions);
+
+            let ball = document.getElementById("ball");
+            ball.setAttribute("cx", actualPosition.width);
+            ball.setAttribute("cy", actualPosition.height);
+            ball.setAttribute("r", actualRadius);
+        }
+        function drawPlayer(name, virtualPlayerPosition) {
+            let actualPosition = scaleDimensions(virtualPlayerPosition, virtualPaneDimensions, actualPaneDimensions);
+            let actualDimensions = scaleDimensions(virtualPlayerDimensions, virtualPaneDimensions, actualPaneDimensions);
+
+            let player = document.getElementById(name);
+            player.setAttribute("width", actualDimensions.width);
+            player.setAttribute("height", actualDimensions.height);
+
+            player.setAttribute("x", actualPosition.width);
+            player.setAttribute("y", actualPosition.height);
+        }
+
+        function onSizeChanged() {
+            updatePaneSize();
+            drawBall(virtualBallPosition, virtualBallRadius);
+            drawPlayer("player1", virtualPlayerPosition1);
+            drawPlayer("player2", virtualPlayerPosition2);
+        }
+
+        function movePlayer(name, steps, virtualPlayerPosition) {
+            virtualPlayerPosition.height += steps * virtualPlayerMoveStep;
+            virtualPlayerPosition.height = Math.min(virtualPlayerMaxHeight, Math.max(virtualPlayerMinHeight,
+                virtualPlayerPosition.height));
+
+            drawPlayer(name, virtualPlayerPosition);
+        }
+
+        function onKeyDown(event) {
+            let x = event.which || event.keyCode;
+
+            if (x === 88) {
+                buttonPressed("EXIT", 0);
+                return;
+            }
+            if (x === 82) {
+                alert("Restarting game");
+                restartGame();
+                return;
+            }
+            if (x === 84) {
+                buttonPressed("PAUSE", 0);
+                return;
+            }
+
+            if (!running) {
+                return;
+            }
+
+            let player1DownKey = 83,
+                player1UpKey = 87,
+                player2DownKey = 40,
+                player2UpKey = 38;
+
+            if (x !== player1UpKey && x !== player2UpKey && x !== player1DownKey && x !== player2DownKey) {
+                return;
+            }
+
+            let buttonId = (x === player1UpKey || x === player2UpKey) ? "UP" : "DOWN";
+            let playerId = (x === player1UpKey || x === player1DownKey) ? 0 : 1;
+
+            buttonPressed(buttonId, playerId);
+        }
+
+        function playerAtBall(playerPosition) {
+            return playerPosition.height - virtualBallRadius <= virtualBallPosition.height &&
+                    virtualBallPosition.height <= playerPosition.height + virtualPlayerDimensions.height + virtualBallRadius;
+        }
+
+        function moveBall() {
+            if (!running) {
+                return;
+            }
+
+            if (virtualBallPosition.width <= virtualBallMinDimensions.width ||
+                virtualBallPosition.width >= virtualBallMaxDimensions.width) {
+
+                let player1 = (virtualBallPosition.width <= virtualBallMinDimensions.width);
+                if (!playerAtBall(player1 ? virtualPlayerPosition1 : virtualPlayerPosition2)) {
+                    playerWon("", !player1 ? 0 : 1);
+                    return;
+                }
+
+                virtualBallDirection.width *= -1;
+            }
+            if (virtualBallPosition.height <= virtualBallMinDimensions.height ||
+                virtualBallPosition.height >= virtualBallMaxDimensions.height) {
+                virtualBallDirection.height *= -1;
+            }
+
+            virtualBallPosition.height += virtualBallDirection.height * virtualBallSpeed;
+            virtualBallPosition.width += virtualBallDirection.width * virtualBallSpeed;
+            drawBall(virtualBallPosition, virtualBallRadius);
+        }
+
+        function onLoad() {
+            onSizeChanged();
+        }
+
+        function playerWon(prefix, playerId) {
+            alert(prefix + "Player " + (playerId+1) + " wins!");
+            running = false;
+
+            connection.invoke("endGame", playerId+1);
+        }
+
+        /**
+         * @param buttonId a string belonging to {UP, DOWN, LEFT, RIGHT, PAUSE, EXIT}
+         * @param playerId an integer belonging to {0, 1}
+         */
+        let buttonPressed = function (buttonId, playerId) {
+            if (buttonId === "PAUSE") {
+                running = !running;
+                return;
+            }
+
+            if (buttonId === "EXIT") {
+                playerWon("Player " + (playerId+1) + " left. ", (playerId+1)%2);
+                running = false;
+                return;
+            }
+
+            if (!running) {
+                return;
+            }
+
+            let name = (playerId === 0) ? "player1" : "player2";
+            let virtualPlayerPosition = (name === "player1") ? virtualPlayerPosition1 : virtualPlayerPosition2;
+            let direction = (buttonId === "DOWN") ? 1 : -1;
+
+            movePlayer(name, direction, virtualPlayerPosition);
+        };
+
+        connection = window.sessionStorage.getItem("connection");
+        pin = window.sessionStorage.getItem("pin");
+
+        connection.on("ackButtonPressed", buttonPressed);
+
+    </script>
+</head>
+
+<body onload="onLoad()" onresize="onSizeChanged()" onkeydown="return onKeyDown(event)">
+<!-- Create the SVG pane. -->
+<svg xmlns="http://www.w3.org/2000/svg" height="3000" width="3000" id="svg_board" style="display: block; margin: auto;">
+    <!-- Create the board. -->
+    <rect x="1" y="1" width="298" height="298" fill="thistle" id="board"></rect>
+    <!-- Create the ball. -->
+    <circle cx="150" cy="150" r="15" fill="tomato" id="ball"></circle>
+    <!-- Create the paddle.-->
+    <rect x="150" y="290" width="150" height="10" fill="navy" id="player1"></rect>
+    <rect x="150" y="290" width="150" height="10" fill="navy" id="player2"></rect>
+</svg>
+</body>
+</html>

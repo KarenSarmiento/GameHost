@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script type="text/javascript" src="lib/signalr.min.js"></script>
+    <title>Controller</title>
+    <link rel="stylesheet" href="gameController.css">
+</head>
+<body>
+<div class=cable></div>
+<div class=controller>
+    <button class=centerBlue onclick="buttonPressed('PAUSE');">PAUSE</button>
+    <button class=centerAqua onclick="endGame();">EXIT</button>
+    <div class=centerStart>
+        <div class=SLeft></div>
+        <div class=SRight></div>
+    </div>
+    <div class=centerSelect>
+        <div class=SLeft></div>
+        <div class=SRight></div>
+    </div>
+
+    <div class=controllerLeft>
+        <div class=circle></div>
+        <div class=crossCenter>
+            <div class=crossTop></div>
+            <button class=crossBottom onclick="buttonPressed('BOTTOM');"></button>
+            <button class=crossLeft onclick="buttonPressed('LEFT');"></button>
+            <button class=crossRight onclick="buttonPressed('RIGHT');"></button>
+            <button class=crossCircle onclick="buttonPressed('UP');"></button>
+        </div>
+    </div>
+    <div class=controllerRight>
+        <div class=backButton1Center>
+            <button class=cornerLeft1 onclick="buttonPressed('GREEN');"></button>
+            <button class=cornerRight1 onclick="buttonPressed('BLUE');"></button>
+        </div>
+        <div class=backButton2Center>
+            <button class=cornerLeft2 onclick="buttonPressed('YELLOW');"></button>
+            <button class=cornerRight2 onclick="buttonPressed('RED');"></button>
+        </div>
+    </div>
+</div>
+<script>
+    let pin = window.sessionStorage.getItem("pin");
+    let connection = window.sessionStorage.getItem("connection");
+
+    function buttonPressed(button) {
+        connection.invoke("buttonPressed", pin, button);
+    }
+
+    function endGame() {
+        connection.invoke("endGameFromController", pin);
+        window.location.href = "controller1.html";
+    }
+
+    connection.on("ackEndGame", function(outcome) {
+        if (outcome === "WINNER") {
+            window.alert("You won!");
+            window.location.href = "controller1.html";
+        } else {
+            window.alert("You lost! :(");
+            window.location.href = "controller2.html";
+        }
+    });
+</script>
+</body>
+</html>

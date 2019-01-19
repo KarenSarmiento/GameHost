@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script type="text/javascript" src="lib/signalr.min.js"></script>
+    <script>
+
+    let connection = new signalR.HubConnectionBuilder()
+        .withUrl("/pongHub")
+        .build();
+    window.sessionStorage.setItem("connection", connection);
+
+    connection.start();
+    
+    connection.invoke("startPong");
+    let ackStartPong = function(pin) {
+        windows.sessionStorage.setItem("pin", pin);
+        window.location.href = "display_wait_for_players";
+    };
+
+    connection.on("ackStartPong", ackStartPong);
+        
+    </script>
+    
+</head>
+<body>
+    <h1>Waiting for server...</h1>
+</body>
+</html>

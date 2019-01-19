@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script type="text/javascript" src="lib/signalr.min.js"></script>
+    <title>Controller</title>
+    <style>
+        #formWrapper {
+            position: absolute;
+            margin: auto;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 400px;
+            height: 200px;
+            background-color: indianred;
+            border-radius: 20px;
+            border-style: solid;
+            border-width: 7px;
+            border-color: indigo;
+            font-size: 40px;
+            text-align: center;
+            padding-top: 20px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        #pinBox {
+            font-size: 30px;
+            height: 50px;
+            width: 200px;
+            margin: 5px;
+        }
+
+        #submit {
+            font-size: 40px;
+            margin: 5px;
+        }
+
+        body {
+            background-color: cadetblue;
+        }
+    </style>
+</head>
+<body>
+    <div id="formWrapper">
+        <div id="form" onsubmit=>
+            Type in PIN:<br>
+            <input id="pinBox" name="pin" type="text"><br>
+            <input id="submit" type="submit" value="Play!" onclick="invokeJoinGameRequest(document.getElementById('pinBox'));">
+        </div>
+    </div>
+    <script>
+        import * as signalR from "./lib/signalr";
+
+        // connect to pongHub by default since we currently only have one game available
+        let connection = new signalR.HubConnectionBuilder()
+            .withUrl('/pongHub')
+            .build();
+        connection.start();
+
+        function invokeJoinGameRequest(pin) {
+            connection.invoke("controlConnectionRequest", pin.value);
+            connection.on("ackControlConnectionRequest", function (outcome) {
+                if (outcome === "FAILED") {
+                    window.alert("Please enter a valid pin.");
+                }
+                else {
+                    // store the pin in the web browser in order to know which game launches
+                    window.sessionStorage.setItem("pin", pin.value);
+                    window.sessionStorage.setItem("connection", connection);
+                    // launch the game controller page
+                    window.location.href = 'controller2.html';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
