@@ -10,17 +10,21 @@
     let connection = new signalR.HubConnectionBuilder()
         .withUrl("/pongHub")
         .build();
-    window.sessionStorage.setItem("connection", connection);
+    window.sessionStorage.setItem("connection", JSON.stringify(connection));
 
-    connection.start();
-    
-    connection.invoke("startPong");
     let ackStartPong = function(pin) {
-        windows.sessionStorage.setItem("pin", pin);
-        window.location.href = "display_wait_for_players";
+        window.sessionStorage.setItem("pin", pin);
+        //window.location.href = "/display_wait_for_players.html";
     };
 
     connection.on("ackStartPong", ackStartPong);
+
+    connection.start().then(
+        function () {
+            console.log('connection started');
+            connection.invoke("startPong");
+        }
+    );
         
     </script>
     
