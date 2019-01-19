@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    
-    <script>
 
-    import * as signalR from "./signalr";
+    <script type="text/javascript" src="lib/signalr.min.js"></script>
+    <script>
 
     let connection = new signalR.HubConnectionBuilder()
         .withUrl("/pongHub")
