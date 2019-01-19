@@ -47,7 +47,7 @@ namespace GameHost.Hubs
             Pong instance;
             bool existsGameInstance = gameInstances.TryGetValue(pin, out instance);
             if (existsGameInstance) {
-                Clients.Client(instance.getDisplayID()).SendAsync("arrowPressed", button);
+                Clients.Client(instance.getDisplayID()).SendAsync("ackButtonPressed", button);
             }
         }
 
