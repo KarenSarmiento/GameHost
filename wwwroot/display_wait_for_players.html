@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script>
+        connection = window.sessionStorage.getItem("connection");
+        pin = window.sessionStorage.getItem("pin");
+
+        h1 = document.getElementById("pinText");
+        h1.setAttribute("text", "Pin is " + pin);
+
+        let ackControlConnectionRequest = function (status) {
+            if (status === "SUCCESS") {
+                window.location.href = "display_game.html";
+            }
+        };
+
+        connection.on("ackControlConnectionRequest",
+            ackControlConnectionRequest);
+
+    </script>
+</head>
+<body>
+    <h1 id="pinText"></h1>
+</body>
+</html>
