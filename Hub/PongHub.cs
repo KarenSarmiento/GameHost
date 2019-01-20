@@ -56,9 +56,6 @@ namespace GameHost.Hubs
         // 3. In game, controller sends what arrows are pressed. This is redirected to display.
         public void buttonPressed(int userId, string pin, string button) {
             updatedUserIdToConnectionIdMap(userId, Context.ConnectionId);
-            System.Console.Error.WriteLine("CALLED PRESSED BUTTON");
-            System.Console.Error.WriteLine(button);
-            System.Console.Error.WriteLine(pin);
             Pong instance = new Pong(0);
             bool existsGameInstance = Globals.gameInstances.TryGetValue(pin, out instance);
             if (existsGameInstance) {
