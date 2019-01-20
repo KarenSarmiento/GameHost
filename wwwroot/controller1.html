@@ -13,8 +13,8 @@
             right: 0;
             bottom: 0;
             left: 0;
-            width: 400px;
-            height: 200px;
+            width: 500px;
+            height: 250px;
             background-color: #d1eaf6;
             border-radius: 20px;
             border-style: solid;
@@ -43,6 +43,8 @@
 
         #hubs {
             font-size: 40px;
+            font-family: "Trebuchet MS";
+            color: #11255a;
         }
     </style>
 </head>
@@ -61,7 +63,7 @@
     </div>
     <script>
         // generate user id between 0 and 1 billion
-        let uid = Math.floor(Math.random * 1000000000);
+        let controllerId = Math.floor(Math.random * 1000000000);
 
         function invokeJoinGameRequest(pin) {
             let selectedHub = document.getElementById('hubs').value;
@@ -72,7 +74,7 @@
                 .build();
             connection.start();
 
-            connection.invoke("controlConnectionRequest", uid, pin.value);
+            connection.invoke("controlConnectionRequest", controllerId, pin.value);
             connection.on("ackControlConnectionRequest", function (outcome) {
                 if (outcome === "FAILED") {
                     window.alert("Please enter a valid pin.");
@@ -81,7 +83,7 @@
                     // store the pin in the web browser in order to know which game launches
                     window.sessionStorage.setItem("pin", pin.value);
                     // store the user id in the web browser
-                    window.sessionStorage.setItem("uid", uid);
+                    window.sessionStorage.setItem("controllerId", controllerId);
                     // launch the game controller page
                     window.location.href = 'controller2.html';
                 }
