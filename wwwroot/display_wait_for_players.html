@@ -43,16 +43,29 @@
     <div id="pinPane"><h1 id="pinText"></h1></div>
     <h1 id="waiting" style="padding: 80px;">Waiting for players to connect...</h1>
     <script>
-        connection = window.sessionStorage.getItem("connection");
-        pin = window.sessionStorage.getItem("pin");
+        var displayId = window.sessionStorage.getItem("displayId");
+        var pin = window.sessionStorage.getItem("pin");
 
-        document.getElementById("pinText").innerHTML = "PIN: " + pin;
+        window.onload = function () {
+            document.getElementById("pinText").innerHTML = "Pin is " + pin;
+        }
 
         let ackControlConnectionRequest = function (status) {
+            console.log("received: ", status);
             if (status === "SUCCESS") {
                 window.location.href = "display_game.html";
             }
         };
+
+        let connection = new signalR.HubConnectionBuilder()
+            .withUrl("/pongHub")
+            .build();
+
+        connection.start().then(
+            function () {
+                connection.invoke("notifyChangeConnectionId", displayId);
+            }
+        );
 
         connection.on("ackControlConnectionRequest",
             ackControlConnectionRequest);

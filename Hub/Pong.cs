@@ -1,12 +1,12 @@
 public class Pong
 {
-    private string displayID;
-    private string pOneID;
-    private string pTwoID;
+    private int displayID;
+    private int pOneID;
+    private int pTwoID;
     private bool gameInProgress;
     private int numPlayersInGame;
 
-    public Pong(string displayID) 
+    public Pong(int displayID) 
     {
         this.displayID = displayID;
         gameInProgress = false;
@@ -21,23 +21,23 @@ public class Pong
         return numPlayersInGame;
     }
 
-    public string getPOneID() {
+    public int getPOneID() {
         return pOneID;
     }
 
-    public void setPOneID(string pOneID) {
+    public void setPOneID(int pOneID) {
         this.pOneID = pOneID;
     }
 
-    public string getPTwoID() {
+    public int getPTwoID() {
         return pTwoID;
     }
 
-    public void setPTwoID(string pTwoID) {
+    public void setPTwoID(int pTwoID) {
         this.pTwoID = pTwoID;
     }
 
-    public string getDisplayID() {
+    public int getDisplayID() {
         return displayID;
     }
 
