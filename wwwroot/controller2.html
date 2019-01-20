@@ -1,17 +1,16 @@
-<!--<!DOCTYPE html>-->
-<!--<html>-->
+<!DOCTYPE html>
+<html>
 <head>
     <meta charset="utf-8" />
     <script type="text/javascript" src="lib/signalr.min.js"></script>
-    <script src="lib/jquery-3.3.1.js"></script>
     <title>Controller</title>
     <link rel="stylesheet" href="gameController.css">
 </head>
 <body>
 <div class=cable></div>
 <div class=controller>
-    <button class=centerBlue onclick="buttonPressed('PAUSE');">PAUSE</button>
-    <button class=centerAqua onclick="endGame();">EXIT</button>
+    <button type="button" class=centerBlue onclick="buttonPressed('PAUSE');">PAUSE</button>
+    <button type="button" class=centerAqua onclick="endGame();">EXIT</button>
     <div class=centerStart>
         <div class=SLeft></div>
         <div class=SRight></div>
@@ -24,21 +23,21 @@
     <div class=controllerLeft>
         <div class=circle></div>
         <div class=crossCenter>
-            <div class=crossTop></div>
-            <button class=crossBottom onclick="buttonPressed('BOTTOM');"></button>
-            <button class=crossLeft onclick="buttonPressed('LEFT');"></button>
-            <button class=crossRight onclick="buttonPressed('RIGHT');"></button>
-            <button class=crossCircle onclick="buttonPressed('UP');"></button>
+            <button type="button" class=crossTop onclick="buttonPressed('UP');"></button>
+            <button type="button" class=crossBottom onclick="buttonPressed('BOTTOM');"></button>
+            <button type="button" class=crossLeft onclick="buttonPressed('LEFT');"></button>
+            <button type="button" class=crossRight onclick="buttonPressed('RIGHT');"></button>
+            <div class=crossCircle></div>
         </div>
     </div>
     <div class=controllerRight>
         <div class=backButton1Center>
-            <button class=cornerLeft1 onclick="buttonPressed('GREEN');"></button>
-            <button class=cornerRight1 onclick="buttonPressed('BLUE');"></button>
+            <button type="button" class=cornerLeft1 onclick="buttonPressed('GREEN');"></button>
+            <button type="button" class=cornerRight1 onclick="buttonPressed('BLUE');"></button>
         </div>
         <div class=backButton2Center>
-            <button class=cornerLeft2 onclick="buttonPressed('YELLOW');"></button>
-            <button class=cornerRight2 onclick="buttonPressed('RED');"></button>
+            <button type="button" class=cornerLeft2 onclick="buttonPressed('YELLOW');"></button>
+            <button type="button" class=cornerRight2 onclick="buttonPressed('RED');"></button>
         </div>
     </div>
 </div>
@@ -72,4 +71,4 @@
     });
 </script>
 </body>
-<!--</html>-->
+</html>
