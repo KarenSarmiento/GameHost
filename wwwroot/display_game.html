@@ -18,14 +18,15 @@
         let virtualPaneDimensions = new Dimensions(400, 300);
         let virtualPlayerDimensions = new Dimensions(5, 150);
 
+        let virtualBallRadius = 10;
+        let virtualBallDirection = normalize(new Dimensions(genRandom(0.4, 0.6), genRandom(-1, 1)));
+        let virtualBallSpeed = 0.5;
+
         let initialVirtualBallPosition  = new Dimensions(
             virtualPaneDimensions.width/2,
             virtualPaneDimensions.height/2);
         let virtualBallPosition = getNewDimension(initialVirtualBallPosition);
 
-        let virtualBallRadius = 10;
-        let virtualBallDirection = normalize(new Dimensions(genRandom(0.4, 0.6), genRandom(-1, 1)));
-        let virtualBallSpeed = 0.5;
 
         let virtualBallMinDimensions = new Dimensions(virtualPlayerDimensions.width + virtualBallRadius,
             virtualBallRadius);
@@ -34,8 +35,9 @@
 
         window.setInterval(moveBall, 3);
 
-        let initialVirtualPlayerPosition1 = new Dimensions(0, 0);
-        let initialVirtualPlayerPosition2 = new Dimensions(virtualPaneDimensions.width - virtualPlayerDimensions.width, 0);
+        let initialVirtualPlayerPosition1 = new Dimensions(0, virtualPaneDimensions.height/2 - virtualPlayerDimensions.height/2);
+        let initialVirtualPlayerPosition2 = new Dimensions(virtualPaneDimensions.width - virtualPlayerDimensions.width,
+            virtualPaneDimensions.height/2 - virtualPlayerDimensions.height/2);
         let virtualPlayerPosition1 = getNewDimension(initialVirtualPlayerPosition1);
         let virtualPlayerPosition2 = getNewDimension(initialVirtualPlayerPosition2);
         let virtualPlayerMoveStep = (virtualPaneDimensions.height - virtualPlayerDimensions.height) / 15;
