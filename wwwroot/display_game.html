@@ -222,7 +222,7 @@
         }
 
         /**
-         * @param buttonId a string belonging to {UP, DOWN, LEFT, RIGHT, PAUSE, EXIT}
+         * @param buttonId a string belonging to {UP, BOTTOM, LEFT, RIGHT, PAUSE, EXIT}
          * @param playerId an integer belonging to {0, 1}
          */
         let buttonPressed = function (buttonId, playerId) {
@@ -243,7 +243,7 @@
 
             let name = (playerId === 0) ? "player1" : "player2";
             let virtualPlayerPosition = (name === "player1") ? virtualPlayerPosition1 : virtualPlayerPosition2;
-            let direction = (buttonId === "DOWN") ? 1 : -1;
+            let direction = (buttonId === "BOTTOM") ? 1 : -1;
 
             movePlayer(name, direction, virtualPlayerPosition);
         };
@@ -254,16 +254,15 @@
             .withUrl("/pongHub")
             .build();
 
+        connection.on("ackButtonPressed", buttonPressed);
+
         connection.start().then(
             function () {
                 connection.invoke("notifyChangeConnectionId", displayId);
             }
         );
 
-        pin = window.sessionStorage.getItem("pin");
-
-        connection.on("ackButtonPressed", buttonPressed);
-
+        var pin = window.sessionStorage.getItem("pin");
     </script>
 </head>
 
