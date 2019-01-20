@@ -16,7 +16,7 @@
         let screenProportions = new Dimensions(4, 3);
 
         let virtualPaneDimensions = new Dimensions(400, 300);
-        let virtualPlayerDimensions = new Dimensions(5, 100);
+        let virtualPlayerDimensions = new Dimensions(5, 150);
 
         let initialVirtualBallPosition  = new Dimensions(
             virtualPaneDimensions.width/2,
@@ -215,10 +215,10 @@
         }
 
         function playerWon(prefix, playerId) {
+            connection.invoke("endGame", displayId, pin, playerId+1);
+
             alert(prefix + "Player " + (playerId+1) + " wins!");
             running = false;
-
-            connection.invoke("endGame", displayId, pin, playerId+1);
         }
 
         /**
