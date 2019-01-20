@@ -119,6 +119,7 @@ body{
     background-color: #0099FF;
     border-radius: 20px;
     font-size: 30px;
+    font-weight: bold;
 }
 
 .centerAqua{
@@ -130,6 +131,7 @@ body{
     background-color: aquamarine;
     border-radius: 20px;
     font-size: 30px;
+    font-weight: bold;
 }
 
 .backButton1Center{
