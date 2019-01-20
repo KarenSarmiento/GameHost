@@ -26,6 +26,8 @@
         }
 
         #pinPane {
+            margin-top: 100px;
+            vertical-align: middle;
             height: 160px;
             width: 400px;
             background-color: darkslategrey;
@@ -39,7 +41,7 @@
 </head>
 <body>
     <div id="pinPane"><h1 id="pinText"></h1></div>
-    <h1 id="waiting">Waiting for players to connect...</h1>
+    <h1 id="waiting" style="padding: 80px;">Waiting for players to connect...</h1>
     <script>
         var displayId = window.sessionStorage.getItem("displayId");
         var pin = window.sessionStorage.getItem("pin");

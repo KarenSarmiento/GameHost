@@ -6,7 +6,6 @@
 
     <script type="text/javascript" src="lib/signalr.min.js"></script>
     <script>
-
     // generate user id between 0 and 1 billion
     let displayId = Math.floor(Math.random() * 1000000000);
 
@@ -32,7 +31,13 @@
     </script>
     
 </head>
-<body>
-    <h1>Waiting for server...</h1>
+<body style="background: #292929">
+    <h1 style="color: white; text-align: center">List of games</h1>
+    <ul style="display:table; margin:0 auto; list-style-type: none;">
+        <li>
+            <h3 style="color: white; text-align: center">Ping Pong</h3>
+            <img src="pong.png" width="400" onclick="onPongClick()">
+        </li>
+    </ul>
 </body>
 </html>
