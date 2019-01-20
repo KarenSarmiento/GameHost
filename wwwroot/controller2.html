@@ -44,14 +44,14 @@
 </div>
 <script>
     let pin = window.sessionStorage.getItem("pin");
-    let connection = window.sessionStorage.getItem("connection");
+    let uid = window.sessionStorage.getItem("uid");
 
     function buttonPressed(button) {
-        connection.invoke("buttonPressed", pin, button);
+        connection.invoke("buttonPressed", uid, pin, button);
     }
 
     function endGame() {
-        connection.invoke("endGameFromController", pin);
+        connection.invoke("endGameFromController", uid, pin);
         window.location.href = "controller1.html";
     }
 
@@ -61,7 +61,7 @@
             window.location.href = "controller1.html";
         } else {
             window.alert("You lost! :(");
-            window.location.href = "controller2.html";
+            window.location.href = "controller1.html";
         }
     });
 </script>

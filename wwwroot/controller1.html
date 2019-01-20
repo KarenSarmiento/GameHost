@@ -51,6 +51,8 @@
         </div>
     </div>
     <script>
+        // generate user id between 0 and 1 billion
+        let uid = Math.floor(Math.random * 1000000000);
 
         // connect to pongHub by default since we currently only have one game available
         let connection = new signalR.HubConnectionBuilder()
@@ -59,21 +61,19 @@
         connection.start();
 
         function invokeJoinGameRequest(pin) {
-            // connection.invoke("controlConnectionRequest", pin.value);
-            // connection.on("ackControlConnectionRequest", function (outcome) {
-            //     if (outcome === "FAILED") {
-            //         window.alert("Please enter a valid pin.");
-            //     }
-            //     else {
-            //         // store the pin in the web browser in order to know which game launches
-            //         window.sessionStorage.setItem("pin", pin.value);
-            //         window.sessionStorage.setItem("connection", connection);
-            //         // launch the game controller page
-            //         window.location.href = 'controller2.html';
-            //     }
-            // });
-            $(document).ready(function() {
-                $('html').empty().load('controller2.html');
+            connection.invoke("controlConnectionRequest", uid, pin.value);
+            connection.on("ackControlConnectionRequest", function (outcome) {
+                if (outcome === "FAILED") {
+                    window.alert("Please enter a valid pin.");
+                }
+                else {
+                    // store the pin in the web browser in order to know which game launches
+                    window.sessionStorage.setItem("pin", pin.value);
+                    // store the user id in the web browser
+                    window.sessionStorage.setItem("uid", uid);
+                    // launch the game controller page
+                    window.location.href = 'controller2.html';
+                }
             });
         }
     </script>
