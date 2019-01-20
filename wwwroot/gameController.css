@@ -67,6 +67,7 @@ body{
     border-radius: 100%;
     margin-top: 5px;
     margin-left: 5px;
+    border: none;
 }
 
 .crossTop{
@@ -76,6 +77,7 @@ body{
     position: absolute;
     border-radius: 15%;
     margin-top: -60px;
+    border: none;
 }
 
 .crossBottom{
@@ -85,6 +87,7 @@ body{
     position: absolute;
     border-radius: 15%;
     margin-top: 60px;
+    border: none;
 }
 
 .crossLeft{
@@ -94,6 +97,7 @@ body{
     position: absolute;
     border-radius: 15%;
     margin-left: -60px;
+    border: none;
 }
 
 .crossRight{
@@ -103,6 +107,7 @@ body{
     position: absolute;
     border-radius: 15%;
     margin-left: 60px;
+    border: none;
 }
 
 .centerBlue{
