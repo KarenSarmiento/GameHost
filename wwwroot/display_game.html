@@ -21,7 +21,8 @@
 
         let virtualBallRadius = 10;
         let virtualBallDirection = normalize(new Dimensions(genRandom(0.4, 0.6), genRandom(-1, 1)));
-        let virtualBallSpeed = 0.5;
+        let initialVirtualBallSpeed = 0.5;
+        let virtualBallSpeed = initialVirtualBallSpeed;
 
         let initialVirtualBallPosition  = new Dimensions(
             virtualPaneDimensions.width/2,
@@ -59,6 +60,8 @@
 
         function restartGame() {
             running = false;
+
+            virtualBallSpeed = initialVirtualBallSpeed;
 
             virtualBallPosition = getNewDimension(initialVirtualBallPosition);
             virtualPlayerPosition1 = getNewDimension(initialVirtualPlayerPosition1);
@@ -176,7 +179,7 @@
                 return;
             }
 
-            let buttonId = (x === player1UpKey || x === player2UpKey) ? "UP" : "DOWN";
+            let buttonId = (x === player1UpKey || x === player2UpKey) ? "UP" : "BOTTOM";
             let playerId = (x === player1UpKey || x === player1DownKey) ? 0 : 1;
 
             buttonPressed(buttonId, playerId);
@@ -185,6 +188,25 @@
         function playerAtBall(playerPosition) {
             return playerPosition.height - virtualBallRadius <= virtualBallPosition.height &&
                     virtualBallPosition.height <= playerPosition.height + virtualPlayerDimensions.height + virtualBallRadius;
+        }
+
+        function addRandomFactorToDirection(direction) {
+            let negWidth = (direction.width < 0);
+            let negHeight = (direction.height < 0);
+
+            let toAdd = new Dimensions(0, 0);
+
+            let maxAdd = 0.5;
+
+            toAdd.width = ((negWidth) ? -1 : 1) * genRandom(0, maxAdd);
+            toAdd.height = ((negHeight) ? -1 : 1) * genRandom(0, maxAdd);
+
+            let newDir = new Dimensions(toAdd.width+ direction.width,
+                toAdd.height + direction.height);
+
+            virtualBallSpeed += 0.05;
+
+            return normalize(newDir);
         }
 
         function moveBall() {
@@ -202,10 +224,12 @@
                 }
 
                 virtualBallDirection.width *= -1;
+                virtualBallDirection = addRandomFactorToDirection(virtualBallDirection);
             }
             if (virtualBallPosition.height <= virtualBallMinDimensions.height ||
                 virtualBallPosition.height >= virtualBallMaxDimensions.height) {
                 virtualBallDirection.height *= -1;
+                virtualBallDirection = addRandomFactorToDirection(virtualBallDirection);
             }
 
             virtualBallPosition.height += virtualBallDirection.height * virtualBallSpeed;
