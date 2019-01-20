@@ -21,6 +21,7 @@
             border-width: 7px;
             border-color: #11255a;
             font-size: 40px;
+            font-family: "Trebuchet MS", serif;
             text-align: center;
             padding-top: 20px;
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -37,13 +38,13 @@
         #submit {
             font-size: 40px;
             margin: 5px;
-            font-family: "Trebuchet MS";
+            font-family: "Trebuchet MS", serif;
             color: #11255a;
         }
 
         #hubs {
             font-size: 40px;
-            font-family: "Trebuchet MS";
+            font-family: "Trebuchet MS", serif;
             color: #11255a;
         }
     </style>
@@ -63,7 +64,7 @@
     </div>
     <script>
         // generate user id between 0 and 1 billion
-        let controllerId = Math.floor(Math.random * 1000000000);
+        let controllerId = Math.floor(Math.random() * 1000000000);
 
         function invokeJoinGameRequest(pin) {
             let selectedHub = document.getElementById('hubs').value;
