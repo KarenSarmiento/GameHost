@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <script type="text/javascript" src="lib/signalr.min.js"></script>
+    <script src="lib/jquery-3.3.1.js"></script>
     <title>Controller</title>
     <style>
         #formWrapper {
@@ -14,15 +15,16 @@
             left: 0;
             width: 400px;
             height: 200px;
-            background-color: indianred;
+            background-color: #d1eaf6;
             border-radius: 20px;
             border-style: solid;
             border-width: 7px;
-            border-color: indigo;
+            border-color: #11255a;
             font-size: 40px;
             text-align: center;
             padding-top: 20px;
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            color: #11255a;
         }
 
         #pinBox {
@@ -35,23 +37,22 @@
         #submit {
             font-size: 40px;
             margin: 5px;
-        }
-
-        body {
-            background-color: cadetblue;
+            font-family: "Trebuchet MS";
+            color: #11255a;
         }
     </style>
 </head>
 <body>
     <div id="formWrapper">
-        <div id="form" onsubmit=>
+        <div id="form">
             Type in PIN:<br>
             <input id="pinBox" name="pin" type="text"><br>
-            <input id="submit" type="submit" value="Play!" onclick="invokeJoinGameRequest(document.getElementById('pinBox'));">
+            <button id="submit" type="button" onclick="invokeJoinGameRequest(document.getElementById('pinBox'));">Play!</button>
         </div>
     </div>
     <script>
-        import * as signalR from "./lib/signalr";
+        // generate user id between 0 and 1 billion
+        let uid = Math.floor(Math.random * 1000000000);
 
         // connect to pongHub by default since we currently only have one game available
         let connection = new signalR.HubConnectionBuilder()
@@ -60,7 +61,7 @@
         connection.start();
 
         function invokeJoinGameRequest(pin) {
-            connection.invoke("controlConnectionRequest", pin.value);
+            connection.invoke("controlConnectionRequest", uid, pin.value);
             connection.on("ackControlConnectionRequest", function (outcome) {
                 if (outcome === "FAILED") {
                     window.alert("Please enter a valid pin.");
@@ -68,7 +69,8 @@
                 else {
                     // store the pin in the web browser in order to know which game launches
                     window.sessionStorage.setItem("pin", pin.value);
-                    window.sessionStorage.setItem("connection", connection);
+                    // store the user id in the web browser
+                    window.sessionStorage.setItem("uid", uid);
                     // launch the game controller page
                     window.location.href = 'controller2.html';
                 }
