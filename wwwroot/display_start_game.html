@@ -5,29 +5,30 @@
     <title>Title</title>
 
     <script type="text/javascript" src="lib/signalr.min.js"></script>
-    <script>
-    // generate user id between 0 and 1 billion
-    let displayId = Math.floor(Math.random() * 1000000000);
+    <script>function onPongClick() {
+        // generate user id between 0 and 1 billion
+        let displayId = Math.floor(Math.random() * 1000000000);
 
-    let connection = new signalR.HubConnectionBuilder()
-        .withUrl("/pongHub")
-        .build();
-    window.sessionStorage.setItem("displayId", displayId);
+        let connection = new signalR.HubConnectionBuilder()
+            .withUrl("/pongHub")
+            .build();
+        window.sessionStorage.setItem("displayId", displayId);
 
-    let ackStartPong = function(pin) {
-        window.sessionStorage.setItem("pin", pin);
-        window.location.href = "/display_wait_for_players.html";
-    };
+        let ackStartPong = function(pin) {
+            window.sessionStorage.setItem("pin", pin);
+            window.location.href = "/display_wait_for_players.html";
+        };
 
-    connection.on("ackStartPong", ackStartPong);
+        connection.on("ackStartPong", ackStartPong);
 
-    connection.start().then(
-        function () {
-            console.log('connection started');
-            connection.invoke("startPong", displayId);
-        }
-    );
-        
+        connection.start().then(
+            function () {
+                console.log('connection started');
+                connection.invoke("startPong", displayId);
+            }
+        );
+    }
+
     </script>
     
 </head>
