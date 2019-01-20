@@ -16,7 +16,7 @@
     
     connection.invoke("startPong");
     let ackStartPong = function(pin) {
-        windows.sessionStorage.setItem("pin", pin);
+        window.sessionStorage.setItem("pin", pin);
         window.location.href = "display_wait_for_players";
     };
 

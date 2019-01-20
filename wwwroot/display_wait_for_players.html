@@ -2,15 +2,49 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-
+    <title>Waiting</title>
     <script type="text/javascript" src="lib/signalr.min.js"></script>
+    <style>
+        *{
+            margin: auto;
+            padding: 0;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #292929;
+            text-align: center;
+        }
+
+        h1 {
+            position: relative;
+            font-size: 60px;
+            font-family: "Trebuchet MS", serif;
+            color: white;
+            top: 25%;
+        }
+
+        #pinPane {
+            height: 160px;
+            width: 400px;
+            background-color: darkslategrey;
+            text-align: center;
+            border-style: solid;
+            border-width: 7px;
+            border-color: white;
+            border-radius: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div id="pinPane"><h1 id="pinText"></h1></div>
+    <h1 id="waiting">Waiting for players to connect...</h1>
     <script>
         connection = window.sessionStorage.getItem("connection");
         pin = window.sessionStorage.getItem("pin");
 
-        h1 = document.getElementById("pinText");
-        h1.setAttribute("text", "Pin is " + pin);
+        document.getElementById("pinText").innerHTML = "PIN: " + pin;
 
         let ackControlConnectionRequest = function (status) {
             if (status === "SUCCESS") {
@@ -22,8 +56,5 @@
             ackControlConnectionRequest);
 
     </script>
-</head>
-<body>
-    <h1 id="pinText"></h1>
 </body>
 </html>
