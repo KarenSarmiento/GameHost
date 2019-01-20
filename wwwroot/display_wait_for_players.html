@@ -6,7 +6,7 @@
 
     <script type="text/javascript" src="lib/signalr.min.js"></script>
     <script>
-        var connection = JSON.parse(window.sessionStorage.getItem("connection"));
+        var displayId = window.sessionStorage.getItem("displayId");
         var pin = window.sessionStorage.getItem("pin");
 
         window.onload = function () {
@@ -14,10 +14,21 @@
         }
 
         let ackControlConnectionRequest = function (status) {
+            console.log("received: ", status);
             if (status === "SUCCESS") {
                 window.location.href = "display_game.html";
             }
         };
+
+        let connection = new signalR.HubConnectionBuilder()
+            .withUrl("/pongHub")
+            .build();
+
+        connection.start().then(
+            function () {
+                connection.invoke("notifyChangeConnectionId", displayId);
+            }
+        );
 
         connection.on("ackControlConnectionRequest",
             ackControlConnectionRequest);

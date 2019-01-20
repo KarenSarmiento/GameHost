@@ -44,7 +44,7 @@
 </div>
 <script>
     let pin = window.sessionStorage.getItem("pin");
-    let uid = window.sessionStorage.getItem("uid");
+    let controllerId = window.sessionStorage.getItem("controllerId");
     let hub = window.sessionStorage.getItem("hub");
 
     let connection = new signalR.HubConnectionBuilder()
@@ -53,11 +53,11 @@
     connection.start();
 
     function buttonPressed(button) {
-        connection.invoke("buttonPressed", uid, pin, button);
+        connection.invoke("buttonPressed", controllerId, pin, button);
     }
 
     function endGame() {
-        connection.invoke("endGameFromController", uid, pin);
+        connection.invoke("endGameFromController", controllerId, pin);
         window.location.href = "controller1.html";
     }
 

@@ -61,7 +61,7 @@
     </div>
     <script>
         // generate user id between 0 and 1 billion
-        let uid = Math.floor(Math.random * 1000000000);
+        let controllerId = Math.floor(Math.random() * 1000000000);
 
         function invokeJoinGameRequest(pin) {
             let selectedHub = document.getElementById('hubs').value;
@@ -70,10 +70,11 @@
             let connection = new signalR.HubConnectionBuilder()
                 .withUrl(selectedHub)
                 .build();
-            connection.start();
-
-            connection.invoke("controlConnectionRequest", uid, pin.value);
+            connection.start().then( function() {
+                connection.invoke("controlConnectionRequest", controllerId, pin.value);
+            });
             connection.on("ackControlConnectionRequest", function (outcome) {
+                window.alert(outcome);
                 if (outcome === "FAILED") {
                     window.alert("Please enter a valid pin.");
                 }
@@ -81,7 +82,7 @@
                     // store the pin in the web browser in order to know which game launches
                     window.sessionStorage.setItem("pin", pin.value);
                     // store the user id in the web browser
-                    window.sessionStorage.setItem("uid", uid);
+                    window.sessionStorage.setItem("controllerId", controllerId);
                     // launch the game controller page
                     window.location.href = 'controller2.html';
                 }
