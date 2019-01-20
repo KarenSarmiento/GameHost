@@ -41,7 +41,7 @@
             virtualPaneDimensions.height/2 - virtualPlayerDimensions.height/2);
         let virtualPlayerPosition1 = getNewDimension(initialVirtualPlayerPosition1);
         let virtualPlayerPosition2 = getNewDimension(initialVirtualPlayerPosition2);
-        let virtualPlayerMoveStep = (virtualPaneDimensions.height - virtualPlayerDimensions.height) / 15;
+        let virtualPlayerMoveStep = (virtualPaneDimensions.height - virtualPlayerDimensions.height) / 10;
 
         let virtualPlayerMinHeight = 0;
         let virtualPlayerMaxHeight = virtualPaneDimensions.height - virtualPlayerDimensions.height;
@@ -245,6 +245,7 @@
 
             alert(prefix + "Player " + (playerId+1) + " wins!");
             running = false;
+            window.location.href = "display_start_game.html";
         }
 
         /**
