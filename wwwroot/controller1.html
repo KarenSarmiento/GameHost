@@ -40,6 +40,10 @@
             font-family: "Trebuchet MS";
             color: #11255a;
         }
+
+        #hubs {
+            font-size: 40px;
+        }
     </style>
 </head>
 <body>
@@ -47,33 +51,40 @@
         <div id="form">
             Type in PIN:<br>
             <input id="pinBox" name="pin" type="text"><br>
+            <select id="hubs" required>
+                <option selected disabled hidden>Select game</option>
+                <option value="/pongHub">Ping pong</option>
+                <option value="/snakeHub">Snake</option>
+            </select><br>
             <button id="submit" type="button" onclick="invokeJoinGameRequest(document.getElementById('pinBox'));">Play!</button>
         </div>
     </div>
     <script>
-
-        // connect to pongHub by default since we currently only have one game available
-        let connection = new signalR.HubConnectionBuilder()
-            .withUrl('/pongHub')
-            .build();
-        connection.start();
+        // generate user id between 0 and 1 billion
+        let uid = Math.floor(Math.random * 1000000000);
 
         function invokeJoinGameRequest(pin) {
-            // connection.invoke("controlConnectionRequest", pin.value);
-            // connection.on("ackControlConnectionRequest", function (outcome) {
-            //     if (outcome === "FAILED") {
-            //         window.alert("Please enter a valid pin.");
-            //     }
-            //     else {
-            //         // store the pin in the web browser in order to know which game launches
-            //         window.sessionStorage.setItem("pin", pin.value);
-            //         window.sessionStorage.setItem("connection", connection);
-            //         // launch the game controller page
-            //         window.location.href = 'controller2.html';
-            //     }
-            // });
-            $(document).ready(function() {
-                $('html').empty().load('controller2.html');
+            let selectedHub = document.getElementById('hubs').value;
+            window.sessionStorage.setItem('hub',selectedHub);
+
+            let connection = new signalR.HubConnectionBuilder()
+                .withUrl(selectedHub)
+                .build();
+            connection.start();
+
+            connection.invoke("controlConnectionRequest", uid, pin.value);
+            connection.on("ackControlConnectionRequest", function (outcome) {
+                if (outcome === "FAILED") {
+                    window.alert("Please enter a valid pin.");
+                }
+                else {
+                    // store the pin in the web browser in order to know which game launches
+                    window.sessionStorage.setItem("pin", pin.value);
+                    // store the user id in the web browser
+                    window.sessionStorage.setItem("uid", uid);
+                    // launch the game controller page
+                    window.location.href = 'controller2.html';
+                }
             });
         }
     </script>
