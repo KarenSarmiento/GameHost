@@ -72,6 +72,26 @@ namespace GameHost.Hubs
             }
         }
 
+        // Controller signals if it decides to leave the game despite it not having finished.
+        public void endGameFromController(string pin) {
+            Pong instance;
+            bool existsGameInstance = gameInstances.TryGetValue(pin, out instance);
+            if (existsGameInstance) {
+                if (Context.ConnectionId == instance.getPOneID()) {
+                    Clients.Client(instance.getPTwoID()).SendAsync("ackEndGameFromController");
+                } else if (Context.ConnectionId == instance.getPTwoID()) {
+                    Clients.Client(instance.getPOneID()).SendAsync("ackEndGameFromController");
+                } else {
+                    Clients.Client(instance.getPOneID()).SendAsync("ackEndGameFromController");
+                    Clients.Client(instance.getPTwoID()).SendAsync("ackEndGameFromController");
+                    System.Console.Error.WriteLine("Dont know which controller attempted to end game.");
+                }
+                Clients.Client(instance.getDisplayID()).SendAsync("ackEndGameFromController");
+                gameInstances.Remove(pin);
+            }
+        }
+
+
         private string generateRandomGamePin() {
             gameInstancePin++;
             return gameInstancePin.ToString();
