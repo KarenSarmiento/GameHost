@@ -76,7 +76,6 @@
                 connection.invoke("controlConnectionRequest", controllerId, pin.value);
             });
             connection.on("ackControlConnectionRequest", function (outcome) {
-                window.alert(outcome);
                 if (outcome === "FAILED") {
                     window.alert("Please enter a valid pin.");
                 }
