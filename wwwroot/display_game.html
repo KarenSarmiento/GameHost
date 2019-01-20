@@ -218,7 +218,7 @@
             alert(prefix + "Player " + (playerId+1) + " wins!");
             running = false;
 
-            connection.invoke("endGame", playerId+1);
+            connection.invoke("endGame", displayId, pin, playerId+1);
         }
 
         /**
@@ -248,7 +248,18 @@
             movePlayer(name, direction, virtualPlayerPosition);
         };
 
-        connection = window.sessionStorage.getItem("connection");
+        var displayId = window.sessionStorage.getItem("displayId");
+
+        let connection = new signalR.HubConnectionBuilder()
+            .withUrl("/pongHub")
+            .build();
+
+        connection.start().then(
+            function () {
+                connection.invoke("notifyChangeConnectionId", displayId);
+            }
+        );
+
         pin = window.sessionStorage.getItem("pin");
 
         connection.on("ackButtonPressed", buttonPressed);

@@ -72,10 +72,11 @@
             let connection = new signalR.HubConnectionBuilder()
                 .withUrl(selectedHub)
                 .build();
-            connection.start();
-
-            connection.invoke("controlConnectionRequest", controllerId, pin.value);
+            connection.start().then( function() {
+                connection.invoke("controlConnectionRequest", controllerId, pin.value);
+            });
             connection.on("ackControlConnectionRequest", function (outcome) {
+                window.alert(outcome);
                 if (outcome === "FAILED") {
                     window.alert("Please enter a valid pin.");
                 }
