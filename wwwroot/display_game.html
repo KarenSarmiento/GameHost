@@ -226,9 +226,6 @@
          * @param playerId an integer belonging to {0, 1}
          */
         let buttonPressed = function (buttonId, playerId) {
-            console.log("RECEIVED ACK PRESSED BUTTON");
-            console.log(playerId);
-            console.log(buttonId);
             if (buttonId === "PAUSE") {
                 running = !running;
                 return;
