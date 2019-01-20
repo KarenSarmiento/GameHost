@@ -290,18 +290,24 @@
 
         var pin = window.sessionStorage.getItem("pin");
     </script>
+
+    <style>
+        body {
+            background-color: #292929;
+        }
+    </style>
 </head>
 
 <body onload="onLoad()" onresize="onSizeChanged()" onkeydown="return onKeyDown(event)">
 <!-- Create the SVG pane. -->
 <svg xmlns="http://www.w3.org/2000/svg" height="3000" width="3000" id="svg_board" style="display: block; margin: auto;">
     <!-- Create the board. -->
-    <rect x="1" y="1" width="298" height="298" fill="thistle" id="board"></rect>
+    <rect x="1" y="1" width="298" height="298" fill="darkslategrey" id="board"></rect>
     <!-- Create the ball. -->
     <circle cx="150" cy="150" r="15" fill="tomato" id="ball"></circle>
     <!-- Create the paddle.-->
-    <rect x="150" y="290" width="150" height="10" fill="navy" id="player1"></rect>
-    <rect x="150" y="290" width="150" height="10" fill="navy" id="player2"></rect>
+    <rect x="150" y="290" width="150" height="10" fill="white" id="player1"></rect>
+    <rect x="150" y="290" width="150" height="10" fill="white" id="player2"></rect>
 </svg>
 </body>
 </html>
