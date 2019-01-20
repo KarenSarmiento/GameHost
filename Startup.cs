@@ -35,7 +35,7 @@ namespace GameHost
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddSignalR().AddAzureSignalR();
+            services.AddSignalR().AddAzureSignalR("Endpoint=https://gamehostsr.service.signalr.net;AccessKey=Xky6m6jTV4iZk+oOFGshc3yWmKARC4RYfQoDHCN5ryo=;Version=1.0;");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
